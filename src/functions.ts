@@ -64,8 +64,7 @@ function checkCollision(a, b) {
 
 export function checkSnakeCollision(snake = []) {
   const [head, ...tail] = snake;
-  const res = tail.some(part => checkCollision(part, head));
-  return !res;
+  return !tail.some(part => checkCollision(part, head));
 }
 
 export function wrapBounds(point) {
