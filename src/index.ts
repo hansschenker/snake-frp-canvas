@@ -1,29 +1,27 @@
 import {
-  Observable,
   BehaviorSubject,
   animationFrameScheduler,
+  combineLatest,
   fromEvent,
-  interval,
-  combineLatest
+  interval
 } from 'rxjs';
 import {
-  map,
-  filter,
-  scan,
-  startWith,
-  skip,
-  withLatestFrom,
   distinctUntilChanged,
-  takeWhile,
+  filter,
+  map,
+  scan,
   share,
-  tap
+  skip,
+  startWith,
+  takeWhile,
+  withLatestFrom
 } from 'rxjs/operators';
 
 import { createCanvasElement, render } from './canvas';
 import { generateApples, generateSnake, move, nextDirection,
          eat, checkSnakeCollision } from './functions';
-import { SNAKE_LENGTH, APPLE_COUNT, POINTS_PER_APPLE, SPEED,
-         FPS, DIRECTIONS, INITIAL_DIRECTION } from './constants';
+import { SNAKE_LENGTH, APPLE_COUNT, POINTS_PER_APPLE, GROW_PER_APPLE,
+         SPEED, FPS, DIRECTIONS, INITIAL_DIRECTION } from './constants';
 
 const canvas = createCanvasElement();
 const ctx = canvas.getContext('2d');
@@ -43,7 +41,7 @@ const direction$ = keyDown$
 const length$ = new BehaviorSubject(SNAKE_LENGTH);
 const snakeLength$ = length$
   .pipe(
-    scan((step, snakeLength) => snakeLength + step)
+    scan((snakeLength, grow) => snakeLength + grow)
   );
 
 const snake$ = tick$
@@ -60,14 +58,14 @@ const snake$ = tick$
 const apples$ = snake$
   .pipe(
     scan(eat, generateApples(APPLE_COUNT)),
-    distinctUntilChanged(),
+    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
     share()
   );
 
 const applesEaten$ = apples$
   .pipe(
     skip(1),
-    map(_ => 1)
+    map(_ => GROW_PER_APPLE)
   )
   .subscribe(v => length$.next(v));
 

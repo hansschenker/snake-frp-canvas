@@ -5,6 +5,7 @@ export const CELL_SIZE = 10;
 export const SNAKE_LENGTH = 3;
 export const APPLE_COUNT = 2;
 export const POINTS_PER_APPLE = 1;
+export const GROW_PER_APPLE = 1;
 export const SPEED = 100;
 export const FPS = 60;
 export const DIRECTIONS = {

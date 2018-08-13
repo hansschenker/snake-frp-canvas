@@ -32,22 +32,11 @@ export function nextDirection(previous, next) {
 }
 
 export function eat(apples, snake) {
-  // const head = snake[0];
-  // const newApples = apples.filter(apple => !checkCollision(head, apple));
-  // const eaten = newApples.length < apples.length;
-  // const a = eaten ? [getRandomPosition(snake)] : [];
-  // return [...newApples, ...a];
-
   const head = snake[0];
-
-  for ( let i = 0; i < apples.length; i++ ) {
-    if ( checkCollision( apples[ i ], head ) ) {
-      apples.splice( i, 1 );
-      return [ ...apples, getRandomPosition( snake ) ];
-    }
-  }
-
-  return apples;
+  const withoutEaten = apples.filter(apple => !checkCollision(head, apple));
+  const eaten = withoutEaten.length < apples.length;
+  const added = eaten ? [getRandomPosition(snake)] : [];
+  return [...withoutEaten, ...added];
 }
 
 export function generateApples(count) {
