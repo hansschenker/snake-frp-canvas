@@ -58,7 +58,7 @@ const snake$ = tick$
 const apples$ = snake$
   .pipe(
     scan(eat, generateApples(APPLE_COUNT)),
-    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+    distinctUntilChanged(compareObjects),
     share()
   );
 
