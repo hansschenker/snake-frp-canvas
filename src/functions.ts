@@ -14,9 +14,11 @@ export function move(snake, { direction, snakeLength }) {
     y: head.y + direction.y
   };
 
-  const newBody = snake.length > snakeLength
-    ? snake.slice(0, -1)
-    : snake;
+  const ateApple = snakeLength > snake.length;
+
+  const newBody = ateApple
+    ? snake
+    : snake.slice(0, -1);
 
   return [newHead, ...newBody].map(wrapBounds);
 }
@@ -34,8 +36,8 @@ export function nextDirection(previous, next) {
 export function eat(apples, snake) {
   const head = snake[0];
   const withoutEaten = apples.filter(apple => !checkCollision(head, apple));
-  const eaten = withoutEaten.length < apples.length;
-  const added = eaten ? [getRandomPosition(snake)] : [];
+  const wasEaten = withoutEaten.length < apples.length;
+  const added = wasEaten ? [getRandomPosition(snake)] : [];
   return [...withoutEaten, ...added];
 }
 

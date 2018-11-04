@@ -10,14 +10,14 @@ export function createCanvasElement() {
   return canvas;
 }
 
-export function render(ctx, scene) {
-  renderBackground(ctx, scene.score);
-  renderSnake(ctx, scene.snake);
-  renderApples(ctx, scene.apples);
+export function render(ctx, {snake, score, apples}) {
+  renderBackground(ctx, score);
+  renderSnake(ctx, snake);
+  renderApples(ctx, apples);
 }
 
 export function renderBackground(ctx, score) {
-  ctx.fillStyle = 'rgba( 251, 251, 251, .1 )';
+  ctx.fillStyle = 'rgba( 251, 251, 251, .7 )';
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   if (!score) return;

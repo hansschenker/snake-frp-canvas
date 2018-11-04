@@ -1,6 +1,5 @@
 import {
   BehaviorSubject,
-  animationFrameScheduler,
   combineLatest,
   fromEvent,
   interval
@@ -21,7 +20,7 @@ import { createCanvasElement, render } from './canvas';
 import { generateApples, generateSnake, move, nextDirection,
          eat, checkSnakeCollision, compareObjects } from './functions';
 import { SNAKE_LENGTH, APPLE_COUNT, POINTS_PER_APPLE, GROW_PER_APPLE,
-         SPEED, FPS, DIRECTIONS, INITIAL_DIRECTION } from './constants';
+         SPEED, DIRECTIONS, INITIAL_DIRECTION } from './constants';
 
 const canvas = createCanvasElement();
 const ctx = canvas.getContext('2d');
@@ -38,10 +37,10 @@ const direction$ = keyDown$
     distinctUntilChanged()
   );
 
-const length$ = new BehaviorSubject(SNAKE_LENGTH);
-const snakeLength$ = length$
+const increaseLength$ = new BehaviorSubject(0);
+const snakeLength$ = increaseLength$
   .pipe(
-    scan((snakeLength, grow) => snakeLength + grow)
+    scan((snakeLength, grow) => snakeLength + grow, SNAKE_LENGTH)
   );
 
 const snake$ = tick$
@@ -67,9 +66,9 @@ const applesEaten$ = apples$
     skip(1),
     map(_ => GROW_PER_APPLE)
   )
-  .subscribe(v => length$.next(v));
+  .subscribe(v => increaseLength$.next(v));
 
-const score$ = length$
+const score$ = increaseLength$
   .pipe(
     skip(1),
     startWith(0),
@@ -81,13 +80,10 @@ const scene$ = combineLatest(
   (snake, apples, score) => ({ snake, apples, score })
 );
 
-const game$ = interval(1000 / FPS, animationFrameScheduler)
+const game$ = tick$
   .pipe(
     withLatestFrom(scene$, (_, scene) => scene),
     takeWhile(scene => checkSnakeCollision(scene.snake))
   );
 
-game$.subscribe({
-  next: (scene) => render(ctx, scene),
-  complete: console.log
-});
+game$.subscribe(scene => render(ctx, scene));
