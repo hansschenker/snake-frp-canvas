@@ -19,7 +19,7 @@ import {
 
 import { createCanvasElement, render } from './canvas';
 import { generateApples, generateSnake, move, nextDirection,
-         eat, checkSnakeCollision } from './functions';
+         eat, checkSnakeCollision, compareObjects } from './functions';
 import { SNAKE_LENGTH, APPLE_COUNT, POINTS_PER_APPLE, GROW_PER_APPLE,
          SPEED, FPS, DIRECTIONS, INITIAL_DIRECTION } from './constants';
 
