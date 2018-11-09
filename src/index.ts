@@ -50,8 +50,7 @@ const snake$ = tick$
       snakeLength$,
       (_, direction, snakeLength) => ({ direction, snakeLength })
     ),
-    scan(move, generateSnake(SNAKE_LENGTH)),
-    share()
+    scan(move, generateSnake(SNAKE_LENGTH))
   );
 
 const apples$ = snake$
