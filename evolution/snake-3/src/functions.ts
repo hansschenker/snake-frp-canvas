@@ -16,7 +16,7 @@ export function generateSnake(length) {
   return range(length).map(i => ({x: i, y: 0}))
 }
 
-export function move(snake, { direction, snakeLength }) {
+export function move(snake, { direction }) {
   const head = snake[0];
 
   const newHead = {

@@ -9,7 +9,6 @@ import {
   filter,
   map,
   scan,
-  share,
   startWith,
   withLatestFrom,
   skip
